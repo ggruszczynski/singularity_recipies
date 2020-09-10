@@ -1,5 +1,5 @@
 Bootstrap:docker  
-From:ubuntu:16.04
+From:ubuntu:20.04
 
 %labels
 MAINTAINER Vanessasaur
@@ -16,6 +16,7 @@ exec /bin/bash /code/rawr.sh "$@"
 %post  
 echo "This section happens once after bootstrap to build the image."  
 mkdir -p /code  
-apt-get install vim  
+apt update
+apt-get install -y vim  
 echo "RoooAAAAR" >> /code/rawr.sh
 chmod u+x /code/rawr.sh  
