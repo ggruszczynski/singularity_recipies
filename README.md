@@ -24,7 +24,7 @@ singularity run lolcow_latest.sif
 singularity pull shub://ggruszczynski/singularity_recipies
 singularity run singularity_recipies_latest.sif
 
-# to build from docker 
+# to build from docker
 singularity pull docker://openfoam/openfoam7-paraview56
 singularity shell --cleanenv openfoam7-paraview56_latest.sif
 singularity exec --cleanenv cat /etc/os-release

@@ -18,5 +18,6 @@ From: openfoam/openfoam7-paraview56
 %runscript
     echo
     echo "Please load the enviroment: '. /opt/openfoam7/etc/bashrc'"
-    echo "OpenFOAM installation is available under $WM_PROJECT_DIR"
+    echo "Then you shall be able to run: icoFoam -help"
+    echo "OpenFOAM installation is available under \$WM_PROJECT_DIR"
     echo
