@@ -1,0 +1,41 @@
+Bootstrap: docker
+From: ubuntu:18.04
+#https://sylabs.io/guides/3.0/user-guide/environment_and_metadata.html
+
+
+%help
+    This recipe builds conda.
+
+%labels
+    Author ICM UW
+
+%post
+    #!/bin/bash
+    apt-get -qq update && apt-get -qq -y install curl bzip2
+    apt-get -qq -y install libopenblas-dev
+    # curl -sSL https://repo.anaconda.com/miniconda/Miniconda3-py38_4.8.3-Linux-x86_64.sh -o /tmp/miniconda.sh \
+    # && bash /tmp/miniconda.sh -bfp /usr/local
+    curl -sSL https://repo.anaconda.com/miniconda/Miniconda3-py38_4.8.3-Linux-x86_64.sh -o /tmp/miniconda.sh \
+    && bash /tmp/miniconda.sh -bfp /opt/conda
+    
+    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    echo ". /opt/conda/etc/profile.d/conda.sh" >> /bashrc && \
+    echo "conda activate base" >> /bashrc && \
+
+    # conda install -y python=3 
+    apt-get -qq -y autoremove
+    apt-get autoclean
+    /opt/conda/bin/conda clean --all --yes
+
+%environment
+    export PATH=/opt/conda/bin${PATH:+:${PATH}}
+
+%runscript
+    source /bashrc
+    echo
+    echo "Please load the enviroment: '. /bashrc"
+    echo
+
+
+# https://github.com/conda-archive/conda-docker/blob/master/miniconda3/debian/Dockerfile
+# https://github.com/ContinuumIO/docker-images/tree/master/miniconda3

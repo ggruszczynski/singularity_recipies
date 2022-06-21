@@ -1,0 +1,52 @@
+Bootstrap:docker  
+From:ubuntu:20.04
+
+%post
+    ### https://wiki.qt.io/Install_Qt_5_on_Ubuntu
+    apt-get update
+
+    # echo "export TZ=\"Europe/Warsaw\"" >> $SINGULARITY_ENVIRONMENT
+    # ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+    # alternative
+    echo "export DEBIAN_FRONTEND=\"noninteractive\"" >> $SINGULARITY_ENVIRONMENT 
+
+    apt-get install -y tzdata
+    apt-get install -y git cmake wget
+    apt-get install -y build-essential 
+    
+    apt-get install -y libcanberra-gtk-module
+    apt-get install -y libfontconfig1 mesa-common-dev libglu1-mesa-dev
+    apt-get install -y qt5-default libqwt-qt5-dev libeigen3-dev libssh-dev
+
+    # https://askubuntu.com/questions/1034313/ubuntu-18-4-libqt5core-so-5-cannot-open-shared-object-file-no-such-file-or-dir
+    apt-get install -y libqt5gui5 libqt5widgets5 libqt5dbus5 libqt5network5 libqt5core5a
+
+    # https://github.com/dnschneid/crouton/wiki/Fix-error-while-loading-shared-libraries:-libQt5Core.so.5
+    strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5
+
+    #
+    apt-get install -y apt-file 
+    apt-file update
+
+    NOW=`date`
+    echo "export NOW=\"${NOW}\"" >> $SINGULARITY_ENVIRONMENT
+
+%runscript
+    echo "Container was created $NOW"
+    echo "Arguments received: $*"
+    exec echo "$@"
+
+%test
+    grep -q NAME=\"Ubuntu\" /etc/os-release
+    if [ $? -eq 0 ]; then
+        echo "Container base is Ubuntu as expected."
+    else
+        echo "Container base is not Ubuntu."
+    fi
+
+%labels
+    Author icm.edu.pl
+    Version v0.0.1
+
+%help
+    This is a demo container with graphical libs preinstalled.

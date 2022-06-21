@@ -1,0 +1,49 @@
+## https://github.com/rsettlage/ood-rstudio-bio/blob/master/Dockerfile.4.1.2
+## helpful read: https://divingintogeneticsandgenomics.rbind.io/post/run-rstudio-server-with-singularity-on-hpc/
+## combining the tidyverse and verse Dockerfiles, wanting to make sure I have the rstudio-r version
+
+FROM rsettlag/ood-rstudio-basic:4.1.2
+
+LABEL org.label-schema.license="GPL-2.0" \
+      org.label-schema.vcs-url="https://github.com/rsettlag" \
+      maintainer="Robert Settlage <rsettlag@vt.edu>"
+# ENV PATH="${PATH}:/miniconda3/bin"
+
+RUN apt-get update -qq && apt-get -y --no-install-recommends install \
+  libxml2-dev \
+  libfftw3-dev \
+  libgtk2.0-dev \
+  xvfb \
+  xauth \
+  xfonts-base \
+  libxt-dev \
+  libcairo2-dev \
+  libsqlite3-dev \
+  libmariadbd-dev \
+##  libmariadb-client-lgpl-dev \
+  ## replaced by  this one maybe
+  libmariadb-client-lgpl-dev-compat \
+  libpq-dev \
+  libssh2-1-dev \
+  mesa-common-dev \
+  libglu1-mesa-dev \
+  unixodbc-dev \
+  libsasl2-dev \
+  libhdf5-dev \
+  curl \
+  rustc \
+  bzip2 \
+  php \
+  php-common \
+  imagemagick \
+  php-imagick \
+  libmpfr-dev
+
+RUN echo "options(repos = c(CRAN='https://cran.rstudio.com'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site
+
+RUN Rscript -e "BiocManager::install(update=FALSE,ask=FALSE,lib.loc='/usr/local/lib/R/site-library/',c('EBImage','imager','stringi','htmlTable','microseq','Rdpack','sctransform','Hmisc','caret','biomaRt','GenomicFeatures','geneLenDataBase','kableExtra','formatR','remotes','selectr','caTools','lme4','VennDiagram','doParallel','ape','metap','bigmemory','circlize','dendextend','flashClust','randomForest','parallelDist','pvclust','Rtsne','vegan','zoo','igraph','tibble','car','crosstalk','sctransform','uwot','GenomicAlignments','Rsamtools','multtest','rtracklayer','seqinr','micropan','phangorn','phytools','Biostrings','Biobase','MLSeq','biomaRt','DESeq2','DT','edgeR','goseq','Heatplus','WGCNA','Seurat','Rmpfr'))" 
+
+RUN Rscript -e "devtools::install_github('hoesler/rwantshue')"
+
+RUN apt-get clean \
+  && rm /usr/local/lib/R/etc/Rprofile.site

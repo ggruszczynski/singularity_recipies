@@ -24,10 +24,23 @@ singularity run lolcow_latest.sif
 singularity pull shub://ggruszczynski/singularity_recipies
 singularity run singularity_recipies_latest.sif
 
-# to build from docker
+# to build from docker hub
 singularity pull docker://openfoam/openfoam7-paraview56
 singularity shell --cleanenv openfoam7-paraview56_latest.sif
 singularity exec --cleanenv cat /etc/os-release
+
+# to build from docker file
+# https://www.nas.nasa.gov/hecc/support/kb/converting-docker-images-to-singularity-for-use-on-pleiades_643.html
+
+$ sudo docker build -t ood-rstudio-bio.4.1.2 - < Dockerfile.4.1.2
+
+$ docker images
+REPOSITORY                   TAG       IMAGE ID       CREATED          SIZE
+ood-rstudio-bio.4.1.2        latest    9ab18b041cba   27 minutes ago   7.05GB
+
+$ docker save 9ab18b041cba -o ood_rstudio_bio_docker_412.tar
+
+$ singularity build --sandbox lolcow docker-archive://lolcow.tar
 ```
 
 ### OpenFoam notes
