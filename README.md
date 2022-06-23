@@ -39,6 +39,7 @@ REPOSITORY                   TAG       IMAGE ID       CREATED          SIZE
 ood-rstudio-bio.4.1.2        latest    9ab18b041cba   27 minutes ago   7.05GB
 
 $ docker save 9ab18b041cba -o ood_rstudio_bio_docker_412.tar
+$ singularity build ood_rstudio_bio_singularity_412.sif docker-archive://ood_rstudio_bio_docker_412.tar
 
 $ singularity build --sandbox lolcow docker-archive://lolcow.tar
 ```
